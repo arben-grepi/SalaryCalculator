@@ -1,0 +1,119 @@
+CREATE database if not exists palkanlaskin;
+
+USE palkanlaskin;
+
+
+CREATE TABLE CustomerInfo
+(
+  KäyttäjäID INT NOT NULL Auto_Increment,
+  Käyttäjätunnus VARCHAR(120) NOT NULL,
+  Salasana VARCHAR(120) NOT NULL,
+  PRIMARY KEY (KäyttäjäID)
+);
+
+CREATE TABLE Lisä
+(
+  LisäID INT NOT NULL Auto_increment,
+  Määrä double NOT NULL,
+  pvm DATE NOT NULL,
+  Alkaa TIME NOT NULL,
+  Loppuu TIME NOT NULL,
+  PRIMARY KEY (LisäID)
+);
+
+CREATE TABLE Ylityölisä
+(
+  LisäID INT NOT NULL Auto_increment,
+  Määrä DOUBLE NOT NULL,
+  Työtunnit TIME NOT NULL,
+  Aikaväli INT NOT NULL,
+  PRIMARY KEY (LisäID)
+);
+
+
+CREATE TABLE RandomBenefit
+(
+  LisäID INT NOT NULL Auto_increment,
+  Määrä DOUBLE NOT NULL,
+  Nimi VARCHAR(60) NOT NULL, 
+  Tunnittain_Tai_Kerta INT NOT NULL,
+  PRIMARY KEY (LisäID)
+);
+
+CREATE TABLE RandomDeduction
+(
+  LisäID INT NOT NULL Auto_increment,
+  Määrä double NOT NULL,
+  Nimi VARCHAR(60) NOT NULL, 
+  Tunnittain_Tai_Kerta INT NOT NULL,
+  PRIMARY KEY (LisäID)
+);
+
+
+CREATE TABLE Työsopimus
+(
+  SopimusID INT NOT NULL Auto_increment,
+  Työpaikan_nimi VARCHAR(120),
+  KäyttäjäID INT NOT NULL,
+  Kuukausipalkka float,
+  Tuntipalkka float,
+  PRIMARY KEY (SopimusID),
+  FOREIGN KEY (KäyttäjäID) REFERENCES CustomerInfo(KäyttäjäID)
+);
+
+CREATE TABLE ViikottainenLisä
+(
+  LisäID INT NOT NULL Auto_Increment,
+  Määrä double NOT NULL,
+  Viikonpäivä INT NOT NULL,
+  Alkaa Time NOT NULL,
+  Loppuu Time NOT NULL,
+  PRIMARY KEY (LisäID)
+);
+
+CREATE TABLE TyösopimusYlityölisä
+(
+  LisäID INT NOT NULL,
+  SopimusID INT NOT NULL,
+  PRIMARY KEY (LisäID, SopimusID),
+  FOREIGN KEY (LisäID) REFERENCES Ylityölisä(LisäID),
+  FOREIGN KEY (SopimusID) REFERENCES Työsopimus(SopimusID)
+);
+
+
+CREATE TABLE TyösopimusLisä
+(
+  LisäID INT NOT NULL,
+  SopimusID INT NOT NULL,
+  PRIMARY KEY (LisäID, SopimusID),
+  FOREIGN KEY (LisäID) REFERENCES Lisä(LisäID),
+  FOREIGN KEY (SopimusID) REFERENCES Työsopimus(SopimusID)
+);
+
+CREATE TABLE TyösopimusViikottainenLisä
+(
+  SopimusID INT NOT NULL,
+  LisäID INT NOT NULL,
+  PRIMARY KEY (SopimusID, LisäID),
+  FOREIGN KEY (SopimusID) REFERENCES Työsopimus(SopimusID),
+  FOREIGN KEY (LisäID) REFERENCES ViikottainenLisä(LisäID)
+);
+
+CREATE TABLE TyösopimusRandomBenefit
+(
+  SopimusID INT NOT NULL,
+  LisäID INT NOT NULL,
+  PRIMARY KEY (SopimusID, LisäID),
+  FOREIGN KEY (SopimusID) REFERENCES Työsopimus(SopimusID),
+  FOREIGN KEY (LisäID) REFERENCES RandomBenefit(LisäID)
+);
+CREATE TABLE TyösopimusRandomDeduction
+(
+  SopimusID INT NOT NULL,
+  LisäID INT NOT NULL,
+  PRIMARY KEY (SopimusID, LisäID),
+  FOREIGN KEY (SopimusID) REFERENCES Työsopimus(SopimusID),
+  FOREIGN KEY (LisäID) REFERENCES RandomDeduction(LisäID)
+);
+
+

@@ -1,0 +1,21 @@
+# Ignore build output directories
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.suo
+
+# Ignore build logs and temporary files
+*.log
+*.tlog
+*.tmp
+
+# Ignore package directories
+packages/
+*.nupkg
+
+# Ignore IDE and editor files
+.vs/
+.idea/
+.vscode/

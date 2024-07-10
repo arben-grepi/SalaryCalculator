@@ -1,0 +1,23 @@
+# Visual Studio temporary files
+[Oo]bj/
+[Bb]in/
+
+# .NET build output
+*.dll
+*.pdb
+*.exe
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+
+# NuGet packages
+packages/
+
+# Resharper files
+_ReSharper*/
+
+# Visual Studio Code files
+.vscode/
+

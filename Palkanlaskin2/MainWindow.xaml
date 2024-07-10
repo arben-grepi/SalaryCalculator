@@ -1,0 +1,249 @@
+﻿<Window x:Class="Palkanlaskin2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Palkanlaskin2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="635" Width="615" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Canvas Background="#FFF3E4E4" Margin="0,0,0,-6" >
+        <Button x:Name="btnLogOut" Content="Log out" BorderThickness="3" Height="30" Width="60" Canvas.Left="521" Canvas.Top="28" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnLogOut_click" />
+
+        <Label x:Name="lblCYS" Content="Check Your Salary" Canvas.Left="33" Canvas.Top="18" FontFamily="Cambria" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold"/>
+
+        <Canvas x:Name="canvasloginAndCreateAccount" Height="400" Width="600" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-141" Canvas.Left="-645">
+            <Canvas x:Name="canvasWelcome" Height="33" Width="210" Canvas.Left="380" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-23">
+
+                <Label x:Name="lblWelcome" Content="Welcome " Canvas.Left="10" Canvas.Top="4" FontWeight="Bold" FontFamily="Cambria" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+            </Canvas>
+            <Canvas x:Name="canvasRightUpperCornerComponents" Width="280" Height="140" Canvas.Left="160" Canvas.Top="97" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <GroupBox x:Name="groupStart" Height="120" Width="250"  Canvas.Left="15" Canvas.Top="5" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Canvas>
+                        <Button x:Name="btnLogin" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" Width="70" Canvas.Left="37" Canvas.Top="49" FontSize="10" Click="btnLogin_Click"/>
+                        <Button x:Name="btnCreate" Content="Create account" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" Width="75" Canvas.Left="126" Canvas.Top="49" Click="Create_Click" FontSize="10"/>
+                        <Label Content="Login or create a new accout" Canvas.Left="37" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Top" Width="164"/>
+
+                    </Canvas>
+                </GroupBox>
+                <GroupBox x:Name="groupCreateAccount" Header="Create account" Height="120" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="15" Canvas.Top="5">
+                    <Canvas>
+                        <Label Content="Username" Canvas.Left="10" Canvas.Top="5" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10"/>
+
+                        <Label Content="Password" Canvas.Left="10" Canvas.Top="25" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        <Label Content="Repeat password" Canvas.Left="10" Canvas.Top="44" HorizontalAlignment="Left" VerticalAlignment="Center" Width="91" FontSize="10"/>
+
+                        <TextBox x:Name="txtC_A_Username" Canvas.Left="104" TextWrapping="Wrap" Text="" Canvas.Top="8" Width="120" HorizontalAlignment="Center" VerticalAlignment="Top" KeyDown="txtC_A_Username_KDown"/>
+
+                        <PasswordBox x:Name="txtC_A_Password" Canvas.Left="104" Canvas.Top="28" Width="120" HorizontalAlignment="Center" VerticalAlignment="Top" KeyDown="txtC_A_Password_KDown"/>
+
+                        <PasswordBox x:Name="txtC_A_RepeatPassword" Canvas.Left="104" Canvas.Top="49" Width="120" HorizontalAlignment="Center" VerticalAlignment="Top" KeyDown="txtC_A_RepeatPassword_KDown"/>
+
+
+
+                    </Canvas>
+                </GroupBox>
+                <GroupBox x:Name="groupLogin" Header="Login" Height="120" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="15" Canvas.Top="5">
+                    <Canvas>
+                        <Label Content="Username" Canvas.Left="10" Canvas.Top="16" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10"/>
+
+                        <Label Content="Password" Canvas.Left="10" Canvas.Top="39" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                        <TextBox x:Name="txtLoginsername" Canvas.Left="104" TextWrapping="Wrap" Text="" Canvas.Top="19" Width="120" HorizontalAlignment="Center" VerticalAlignment="Top" KeyDown="txtLoginsername_KDown"/>
+
+                        <PasswordBox x:Name="txtLoginPassword" Canvas.Left="104" Canvas.Top="42" Width="120" HorizontalAlignment="Center" VerticalAlignment="Top" KeyDown="txtLoginPassword_KDown"/>
+
+
+
+                    </Canvas>
+                </GroupBox>
+                <Button x:Name="btnReturn" Content="Return" Canvas.Left="225" Canvas.Top="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Click="btnReturn_Click" Height="20" FontSize="10" KeyDown="btnKeyDown"/>
+                <Button x:Name="btnCreate_Or_Login" Content="." Canvas.Left="125" Canvas.Top="95" Height="20" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center" Click="click_btnCreateUser_Or_Login" KeyDown="btnCreate_Or_Login_KeyDown"/>
+
+
+            </Canvas>
+
+        </Canvas>
+
+        <Canvas x:Name="canvasHowToStart" Height="400" Width="600" Canvas.Left="-645" Canvas.Top="340" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+            <Label Content="Customise your salary." HorizontalAlignment="Center" VerticalAlignment="Top" Width="188" Height="40" FontSize="18" Canvas.Left="50" Canvas.Top="4"/>
+
+            <Canvas x:Name="canvasSalaryAndAddBenefits" Width="600" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-10">
+
+                <Button x:Name="btnSaveAllBenefits" BorderThickness="3" Content="Save and count" Width="94" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btnSaveAllBenefits_MDown" Canvas.Left="415" Canvas.Top="-45"/>
+                <GroupBox x:Name="groupHourlySalary" HorizontalAlignment="Left" Height="76" VerticalAlignment="Center" Width="270" Header="Salary" Canvas.Top="57" Canvas.Left="27">
+                    <Canvas Height="56" Margin="0,0,-2,0">
+                        <Button x:Name="btnHourlySalaryInfo" Height="16" Width="15" Content="?" FontSize="10" Canvas.Left="250" Canvas.Top="-13" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btnHourlySalaryInfo_click"/>
+                        <TextBox x:Name="txtSalaryPerHour" Canvas.Left="142" TextWrapping="Wrap" Text="" Width="32" Height="16" Canvas.Top="23" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Top" KeyDown="txtSalaryPerHour_KDown"/>
+                        <Label Content="Salary per hour: " Width="102" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="35" Canvas.Top="16"/>
+
+                    </Canvas>
+                </GroupBox>
+                <GroupBox x:Name="groupAutomaticallyOccurringBenefits" Height="328" Header="Automatically occuring &#xD;&#xA;benefits and deductions" Width="270" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Top="46" Canvas.Left="304">
+                    <Canvas>
+                        <Button x:Name="btnAutoBenefitAndDeductionInfo" Height="16" Width="15" Canvas.Left="252" Canvas.Top="-25" Content="?" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Click="btnAutoBenefitAndDeductionInfo_click"/>
+                        <GroupBox x:Name="groupOvertimeBenefit" Height="76" Width="208" Header="Overtime benefit" Canvas.Top="190" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="25" FontSize="12">
+                            <Canvas Height="56" Margin="0,0,-2,0">
+                                <ComboBox x:Name="comOvertimeBenefit" SelectedValuePath="ID" DisplayMemberPath="OvertimeInfo" Canvas.Left="4" Canvas.Top="19" Width="142" HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" FontSize="10"/>
+                                <Button x:Name="btnRemoveOvertimeBenefit" Content="Remove" Canvas.Left="157" Canvas.Top="20" Width="34" FontSize="7" Height="16" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btnRemoveOvertimeBenefit_click"/>
+                                <Button BorderThickness="2" x:Name="btnAddOvertime" Content="Add new" Canvas.Left="156" Canvas.Top="-16" Width="36" FontSize="7" Height="17" Click="btnAddOvertime_click" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <Button x:Name="btnOvertimeBenefitInfo" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="16" Width="15" Canvas.Left="196" Canvas.Top="-16" Content="?" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnOvertimeBenefitInfo_click"/>
+
+                            </Canvas>
+                        </GroupBox>
+
+                        <GroupBox x:Name="groupSpecificDayBenefit" Canvas.Top="19" HorizontalAlignment="Left" Height="76" VerticalAlignment="Top" Width="208" Header="Benefits on a specific date" Canvas.Left="25" FontSize="12">
+                            <Canvas Height="56" Margin="0,0,-2,0">
+                                <ComboBox x:Name="comDailyBenefit" SelectedValuePath="ID" DisplayMemberPath="BenefitInfo" Canvas.Left="3" Canvas.Top="19" Width="142" HorizontalAlignment="Center" Height="18" VerticalAlignment="Top" FontSize="10"/>
+                                <Button x:Name="btnRemoveDailyBenefit" Content="Remove" Canvas.Left="157" Canvas.Top="19" Width="34" FontSize="7" Height="16" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btnRemoveSepecificDayBenefit_click"/>
+                                <Button BorderThickness="2" Focusable="True" x:Name="btnSpecicDay" Content="Add new" Canvas.Left="156" Width="36" FontSize="7" Height="17" Canvas.Top="-15" Click="btnAddSpecificDayBenefit_click" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                <Button x:Name="btnBenefitOnSpecificDateInfo" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="16" Width="15" Canvas.Left="197" Canvas.Top="-15" Content="?" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10" Click="btnBenefitsSpecificDateInfo"/>
+                            </Canvas>
+                        </GroupBox>
+
+                        <GroupBox x:Name="groupWeeklyBenefit" HorizontalAlignment="Center" Height="76" VerticalAlignment="Top" Width="208" Header="Weekly occuring benefits" Canvas.Top="103" Canvas.Left="25" FontSize="12">
+                            <Canvas Height="56" Margin="0,0,-2,0">
+                                <ComboBox x:Name="comWeeklyBenefit" SelectedValuePath="ID" DisplayMemberPath="WeeklyBenefitInfo" Canvas.Top="19" Width="142" HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" FontSize="10"/>
+                                <Button x:Name="btnRemoveWeeklyBenefit" Content="Remove" Canvas.Left="156" Canvas.Top="20" Width="34" FontSize="7" Height="16" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnRemoveWeeklyBenefit_click"/>
+                                <Button BorderThickness="2" x:Name="btnWeekly" Content="Add new" Canvas.Left="155" Canvas.Top="-15" Width="36" FontSize="7" Height="17" Click="btnWeekly_click" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                <Button x:Name="btnWeeklyOvertimeBenefitsInfo" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="16" Width="15" Canvas.Left="196" Canvas.Top="-15" Content="?" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnWeeklyOvertimeBenefitsInfo_click"/>
+
+                            </Canvas>
+                        </GroupBox>
+
+                    </Canvas>
+                </GroupBox>
+                <GroupBox x:Name="groupManuallyActivatedBenefitsAndDeduction" Height="241" Header="Manually activated&#xD;&#xA;benefits and deductions" Width="270" Canvas.Top="133" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="26">
+                    <Canvas>
+                        <GroupBox x:Name="groupManualBenefits" Canvas.Top="106" Height="76" Width="208" Header="Manual benefits" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="25">
+                            <Canvas Height="56" Margin="0,0,-2,0">
+                                <ComboBox x:Name="comManualBenefits" SelectedValuePath="ID" DisplayMemberPath="Info" Canvas.Top="19" Width="134" HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" FontSize="10" Canvas.Left="7"/>
+                                <Button x:Name="btnRemoveManualBenefits" Content="Remove" Canvas.Left="153" Canvas.Top="19" Width="34" FontSize="7" Height="16" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btnRemoveManualBenefits_click"/>
+                                <Button BorderThickness="2" Focusable="True" x:Name="btnAddManualBenefit" Content="Add new" Canvas.Left="152" Width="36" FontSize="7" Height="17" Canvas.Top="-11" Click="btnAddManualBenefit_click" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <Button x:Name="btnManualBenefitsInfo" Height="16" Width="15" Content="?" FontSize="10" Canvas.Left="193" Canvas.Top="-11" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btnManualBenefitsInfo_click"/>
+                            </Canvas>
+                        </GroupBox>
+
+                        <GroupBox x:Name="groupManualDeduction" Height="76" Width="208" Header="Manual deductions" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="10" Canvas.Left="25">
+                            <Canvas Height="56" Margin="0,0,-2,0">
+                                <ComboBox x:Name="comManualDeductions" SelectedValuePath="ID" DisplayMemberPath="Info" Canvas.Left="4" Canvas.Top="19" Width="142" HorizontalAlignment="Center" Height="18" VerticalAlignment="Top" FontSize="10"/>
+                                <Button x:Name="btnRemoveManualDeduction" Content="Remove" Canvas.Left="156" Canvas.Top="19" Width="34" FontSize="7" Height="16" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btnRemoveManualDeduction_click"/>
+                                <Button BorderThickness="2" Focusable="True" x:Name="btnAddManualDeduction" Content="Add new" Canvas.Left="156" Width="36" FontSize="7" Height="17" Canvas.Top="-14" Click="btnAddManualDeduction_click" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                <Button x:Name="btnManualDeductionsInfo" Height="16" Width="15" Content="?" FontSize="10" Canvas.Left="197" Canvas.Top="-14" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btnManualDeductionsInfo_click"/>
+                            </Canvas>
+                        </GroupBox>
+                        <Button x:Name="btnManuallyActivatedBandDInfo" Height="16" Width="15" Content="?" FontSize="10" Canvas.Left="250" Canvas.Top="-24" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnManuallyActivatedBandDInfo_click"/>
+
+
+
+                    </Canvas>
+                </GroupBox>
+            </Canvas>
+            <Canvas x:Name="canvasTimeDate" Width="236" Height="241" Canvas.Left="182" Canvas.Top="44" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Canvas x:Name="canvascalendar" Width="180" Height="175" Canvas.Left="28" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Calendar FirstDayOfWeek="Monday" x:Name="calendar" Focusable="True" SelectionMode="SingleRange" Canvas.Left="0" Canvas.Top="5" HorizontalAlignment="Left" VerticalAlignment="Top" PreviewKeyDown="calendar_PKDown1" PreviewMouseDown="calendar_MouseDown1"/>
+                </Canvas>
+                <Canvas x:Name="canvasWeekly" Canvas.Top="20" Canvas.Left="73" Width="90" Height="155" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                    <CheckBox x:Name="monday" Content="Monday" Canvas.Left="10" Canvas.Top="10" Height="20" Width="179" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="tuesday" Content="Tuesday" Canvas.Left="10" Canvas.Top="30" Height="20" Width="179" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="wensday" Content="Wensday" Canvas.Left="10" Canvas.Top="50" Height="20" Width="179" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="thursday" Content="Thursday" Canvas.Left="10" Canvas.Top="70" Height="20" Width="179" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="friday" Content="Friday" Canvas.Left="10" Canvas.Top="90" Height="20" Width="179" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="saturday" Content="Saturday" Canvas.Left="10" Canvas.Top="110" Height="20" Width="179" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="sunday" Content="Sunday" Canvas.Left="10" Canvas.Top="130" Height="20" Width="179" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+
+                </Canvas>
+                <Label Content="/" Canvas.Left="116" Canvas.Top="211" FontWeight="Bold" Width="18" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Button x:Name="btnStart00_End24" Content="All day" Width="34" Height="20" Canvas.Left="70" Canvas.Top="241" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btnAllday_click"/>
+                <Button x:Name="btnExitTimeDate" Content="X" FontFamily="Bold" FontSize="10" Width="20" Height="20" Canvas.Left="220" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="-13" Click="btnExitTimeDate_click"/>
+                <Button x:Name="btnSaveDateTimeOrWeekDay" Content="Save" Width="35" Height="20" Canvas.Left="195" Canvas.Top="214" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnSaveDateTimeOrWeekDay_click" FontSize="10" PreviewKeyDown="btnSaveDateTimeOrWeekDay_KDown"/>
+
+                <Canvas Canvas.Top="190" Canvas.Left="11" Width="119" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBox Focusable="True" BorderThickness="1.5" BorderBrush="Gray" x:Name="txtAmountti" KeyDown="txtAmount_KeyDown" HorizontalAlignment="Center" VerticalAlignment="Top" Width="35" Canvas.Left="122" Height="20" Canvas.Top="-1"/>
+                    <Label Content="Benefit per hour:" FontSize="8" HorizontalAlignment="Center" Height="24" VerticalAlignment="Top" Width="69" Canvas.Left="50" Canvas.Top="-1" />
+                    <Label Content="From:" FontSize="8" Height="24" Width="30" Canvas.Top="24" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="26" />
+
+                </Canvas>
+                <TextBox x:Name="txtShiftEnds1" HorizontalContentAlignment="Center" Focusable="True"  Canvas.Left="130" TextWrapping="Wrap" Text="- - : - -" Canvas.Top="214" Width="48" GotFocus="txtShiftEnds_GotFocus1" PreviewKeyDown="txtShiftEnds_P_KDown1" PreviewKeyUp="txtShiftEnds1_P_Kup1" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtShiftStarts1" HorizontalContentAlignment="Center" TextWrapping="Wrap" Text="- - : - -" Canvas.Top="213" Width="48" GotFocus="txtShiftStartsGotFocus1" PreviewKeyDown="txtShiftStarts_P_KDown1" Canvas.Left="70" PreviewKeyUp="txtShiftStarts_PKup1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+            </Canvas>
+            <GroupBox x:Name="groupboxDeduction" Header="Deduction" Canvas.Left="174" Canvas.Top="112" Height="105" Width="252" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Canvas Height="82" Margin="0,0,-2,0">
+                    <Button x:Name="btnclosegroupDeduction" Content="X" Canvas.Left="184" Width="12" FontSize="7" Height="12" Canvas.Top="-10" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnclosegroupDeduction_click"/>
+                    <Button x:Name="btnSaveDeduction" Content="Save" Width="40" Height="20" FontSize="10" Canvas.Left="185" Canvas.Top="25" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btnSaveDeduction_klick" />
+                    <TextBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" x:Name="txtNameOfDeduction" Canvas.Left="10" TextWrapping="Wrap" Canvas.Top="25" Width="100" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Text="Name of deduction" GotFocus="txtNameOfDeduction_GotFocus" LostFocus="txtNameOfDeduction_LostFocus" KeyDown="txtNameOfDeduction_KeyDown" Height="20"/>
+                    <TextBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" x:Name="txtgroupDeductionAmount" Canvas.Left="120" TextWrapping="Wrap" Canvas.Top="25" Width="50" FontSize="10" Text="Amount" HorizontalAlignment="Left" VerticalAlignment="Center" GotFocus="txtgroupDeductionAmount_GotFocus" LostFocus="txtgroupDeductionAmount_LostFocus" KeyDown="txtgroupDeductionAmount_KeyDown" Height="20"/>
+                    <RadioButton x:Name="radioDeductedHourly" Content="Deducted hourly " Canvas.Left="24" Canvas.Top="58" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <RadioButton x:Name="radioDeductedOnce" Content="Deducted once" Canvas.Left="134" Canvas.Top="58" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Canvas>
+            </GroupBox>
+            <GroupBox x:Name="groupBenefit" Header="Benefit" Canvas.Left="174" Canvas.Top="112" Height="105" Width="252" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Canvas Height="82" Margin="0,0,-2,0">
+                    <TextBox x:Name="txtNameOfBenefit" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Canvas.Left="10" TextWrapping="Wrap" Canvas.Top="25" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10" Text="Name of benefit" GotFocus="txtNameOfBenefit_GotFocus" LostFocus="txtNameOfBenefit_LostFocus" KeyDown="txtNameOfBenefit_KeyDown" Height="20"/>
+                    <TextBox x:Name="txtgroupBenefitAmount" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"  Canvas.Left="120" TextWrapping="Wrap" Canvas.Top="25" Width="50" FontSize="10" Text="Amount" HorizontalAlignment="Left" VerticalAlignment="Center" GotFocus="txtgroupBenefitAmount_GotFocus" LostFocus="txtgroupBenefitAmount_LostFocus" KeyDown="txtgroupBenefitAmount_KeyDown" Height="20"/>
+                    <Button  x:Name="btncloseGroupBenefit" Content="X" Canvas.Left="184" Width="12" FontSize="7" Height="12" Canvas.Top="-11" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btncloseGroupBenefit_click"/>
+                    <Button x:Name="btnSaveBenefit" Content="Save" Width="40" Height="20" Canvas.Left="185" Canvas.Top="25" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Click="btnSaveBenefit_click"/>
+                    <RadioButton x:Name="radioPaidHourly" Content="Paid hourly " Canvas.Left="25" Canvas.Top="57" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10"/>
+                    <RadioButton x:Name="radioPaidOnce" Content="Paid once" Canvas.Left="134" Canvas.Top="58" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10"/>
+                </Canvas>
+            </GroupBox>
+            <GroupBox x:Name="groupOvertime" Header="Overtime" Canvas.Left="100" Canvas.Top="99" Height="166" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Canvas Height="137" Margin="0,0,-2,0">
+                    <TextBox x:Name="txtOvertimeAmount" HorizontalContentAlignment="Center" Width="49" Height="20" Canvas.Left="124" Canvas.Top="29" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <Label Content=" per hour" Canvas.Left="171" Canvas.Top="24" HorizontalAlignment="Center" VerticalAlignment="Top" Width="66" Height="26"/>
+                    <Label Focusable="False" Content="Amount" Canvas.Left="124" Width="56" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Left" HorizontalAlignment="Center" VerticalAlignment="Top" Height="24" Canvas.Top="9" FontStyle="Italic" FontSize="10"/>
+                    <ComboBox x:Name="comhours" Canvas.Left="148" Canvas.Top="68" Width="47" Height="18" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" DropDownClosed="comhours_dropDownClosed"/>
+                    <ComboBox x:Name="comminutes" Canvas.Left="202" Canvas.Top="68" Width="40" Height="18" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10"/>
+                    <Label Focusable="False" Content="/" Canvas.Left="191" Width="16" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Left" Height="24" Canvas.Top="64" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <Label Focusable="False" Content="Hours         Minutes" Canvas.Left="148" Width="96" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Left" Height="24" Canvas.Top="46" HorizontalAlignment="Left" VerticalAlignment="Top" FontStyle="Italic" FontSize="10"/>
+                    <Label Focusable="False" Content="/" Canvas.Left="113" Width="16" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Left" Height="24" Canvas.Top="98" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Label Focusable="False" Content="/" Canvas.Left="239" Width="16" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Left" Height="24" Canvas.Top="98" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Label Content="Overtime benefit is" Canvas.Left="10" Canvas.Top="25" Width="112" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+                    <Label Focusable="False" Content="during one shift" Canvas.Left="10" Canvas.Top="99" Width="88" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="11"/>
+                    <RadioButton x:Name="radioShift"  Canvas.Left="98" Canvas.Top="105" Height="18" Width="19" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Label Focusable="False" Content="in a calendar week" Canvas.Left="124" Canvas.Top="99" Width="102" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="11"/>
+                    <RadioButton x:Name="radioWeek"  Canvas.Left="223" Canvas.Top="105" Height="19" Width="19" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Label  Focusable="False" Content="in a calendar month" Canvas.Left="252" Canvas.Top="99" Width="110" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="11"/>
+                    <RadioButton x:Name="radioMonth"  Canvas.Left="360" Canvas.Top="105" Height="19" Width="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Button x:Name="btnOvertimeSave" BorderThickness="2" Width="42" Height="24" Canvas.Left="320" Canvas.Top="-22" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Save" Click="btnOvertimeSave_Click" />
+                    <Button x:Name="btnReturnFromOvertime" Content="X" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="20" Height="18" Canvas.Left="370" Canvas.Top="-19" Click="btnReturnFromOvertime_click" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <Label Focusable="False" Content="and starts after working" Canvas.Left="10" Canvas.Top="62" Width="138" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Canvas>
+            </GroupBox>
+
+        </Canvas>
+        <Canvas x:Name="canvasTypeInYourShifts" Height="400" Width="615" HorizontalAlignment="Left" Canvas.Top="140" VerticalAlignment="Top" Canvas.Left="695">
+            <Canvas x:Name="canvasCalendarShiftAndAndShiftStartAndEnd" Width="176" Height="258" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="34">
+                <Calendar  x:Name="calendarShift" FirstDayOfWeek="Monday" SelectionMode="SingleRange" Focusable="True" Canvas.Top="35" KeyDown="calendarKeyDown" PreviewMouseDown="calendarShift_PreviewMouseDown" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <Label Content="Shift starts" Canvas.Top="208" FontSize="8" Width="48" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="10"/>
+                <TextBox x:Name="txtShiftStarts" HorizontalContentAlignment="Center" TextWrapping="Wrap" Text="- - : - -" Canvas.Top="229" Width="48" GotFocus="txtShiftStartsGotFocus" PreviewKeyDown="txtShiftStarts_P_KDown" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="15" PreviewKeyUp="tztShiftStarts_PKup"/>
+                <TextBox x:Name="txtShiftEnds" HorizontalContentAlignment="Center" Focusable="True"  Canvas.Left="71" TextWrapping="Wrap" Text="- - : - -" Canvas.Top="229" Width="48" GotFocus="txtShiftEnds_GotFocus" PreviewKeyDown="txtShiftEnds_P_KDown" HorizontalAlignment="Left" VerticalAlignment="Center" KeyUp="txtShiftEnds_Keyup" PreviewKeyUp="txtShiftsEnds_P_KUp"/>
+                <Label Content="Shift ends" Canvas.Left="66" Canvas.Top="208" FontSize="8" Width="48" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Button  x:Name="btnSaveShift" HorizontalContentAlignment ="Center"  VerticalContentAlignment="Center" Focusable="True" Height="29" Width="36" Canvas.Left="134" Canvas.Top="220" Content="+" FontSize="18" Click="btnSaveShift_click" HorizontalAlignment="Left" VerticalAlignment="Center" PreviewKeyDown="btnSaveShift_KDown"/>
+                <Label Content="Type in your shifts" Width="160" Height="33" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-12"/>
+
+            </Canvas>
+            <Canvas x:Name="canvasManualBenefitManualDeduction" Width="216" Height="258" Canvas.Left="34" Canvas.Top="258" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonUp="canvasManualBenefitManualDeduction_click"/>
+
+            <Button x:Name="btnModifySalary" BorderThickness="2.5" Height="30" Width="94" Canvas.Left="415" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Modify salary" Click="btnModifySalary_click" Canvas.Top="-55"/>
+            <Canvas x:Name="canvasSalaryTextblock" Width="294" Height="406" Canvas.Left="282" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBox Focusable="False" Background="White" TextWrapping="Wrap" x:Name="txtSalaryInfo" Width="337" Height="472" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="3" FontSize="10" Canvas.Left="-39"/>
+                <Label Content="Salary" Width="67" Height="33" FontSize="18" Canvas.Top="-30" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="-39"/>
+                <Button  x:Name="btnRemoveLatestShift" HorizontalContentAlignment ="Center"  VerticalContentAlignment="Center" Focusable="True" Height="29" Width="36" Canvas.Top="415" Content="-" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="262" Click="btnRemoveLatestShift_click"/>
+                <Button  x:Name="btnClear" HorizontalContentAlignment ="Center"  VerticalContentAlignment="Center" Focusable="True" Height="29" Width="36" Canvas.Top="445" Content="Clear" FontSize="10
+                        " Canvas.Left="262" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnClear_Click"/>
+            </Canvas>
+
+
+        </Canvas>
+
+
+
+    </Canvas>
+
+</Window>
