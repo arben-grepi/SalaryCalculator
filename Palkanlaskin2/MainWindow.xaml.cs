@@ -222,67 +222,20 @@ namespace Palkanlaskin2
             CheckBoxesWeekdays.Add(saturday);
             CheckBoxesWeekdays.Add(sunday);
         }
-       
-       
-        private void ChangeDotIfNeeded(TextBox textBox)
+
+
+        private void ChangeDotToComma(TextBox textBox)
         {
-            
-            var sana = textBox.Text;
-            decimal num;
+            string text = textBox.Text;
 
-
-            bool pilkku = textBox.Text.Contains(',');
-            bool piste = textBox.Text.Contains('.');
-            if (!pilkku && !piste)
+            // Check if there's a dot in the text
+            if (text.Contains('.'))
             {
-                return;
+                // Replace dot with comma
+                textBox.Text = text.Replace('.', ',');
             }
-            if (pilkku)
-            {
-                bool ok = decimal.TryParse(textBox.Text, out num);
-                if (!ok)
-                {
-                    return;
-                }
-                if (num.ToString() != sana)
-                {
-                    
-                    textBox.Text = sana.Replace(',', '.');
-
-                    return;
-
-
-                }
-
-            }
-            else if (piste)
-            {
-
-                bool ok = decimal.TryParse(textBox.Text, out num);
-                if (!ok)
-                {
-                    return;
-                }
-                if (num.ToString() != sana)
-                {
-
-                    textBox.Text = sana.Replace('.', ',');
-                    return;
-
-
-                }
-
-            }
-            return;
-
-
-
-
-
-
-
-
         }
+
 
 
         // boolean methods
@@ -776,7 +729,7 @@ namespace Palkanlaskin2
             
             if (txtSalaryPerHour.Text != string.Empty)
             {
-                ChangeDotIfNeeded(txtSalaryPerHour);
+                ChangeDotToComma(txtSalaryPerHour);
 
 
                 bool ok = decimal.TryParse(txtSalaryPerHour.Text, out salary);
@@ -809,7 +762,7 @@ namespace Palkanlaskin2
         {
             if (txtSalaryPerHour.Text != string.Empty && e.Key == Key.Enter)
             {
-                ChangeDotIfNeeded(txtSalaryPerHour);
+                ChangeDotToComma(txtSalaryPerHour);
 
                 float amount;
                 bool ok = float.TryParse(txtSalaryPerHour.Text, out amount);
@@ -1546,7 +1499,7 @@ namespace Palkanlaskin2
             DateOnly S = new DateOnly();
             
 
-            ChangeDotIfNeeded(txtAmountti);
+            ChangeDotToComma(txtAmountti);
 
             double amount;
             bool ok = double.TryParse(txtAmountti.Text, out amount);
@@ -1790,6 +1743,9 @@ namespace Palkanlaskin2
         {
             txtShiftStarts1.Text = "- - : - -";
             txtShiftEnds1.Text = "- - : - -";
+            txtShiftStarts1.BorderBrush = Brushes.Gray;
+            txtShiftEnds1.BorderBrush = Brushes.Gray;
+
             listStarts.Clear();
             ListEnds.Clear();
             txtAmountti.BorderBrush = Brushes.Black;
@@ -1806,6 +1762,8 @@ namespace Palkanlaskin2
             calendar.SelectedDate = DateTime.Now;
             txtShiftStarts1.Text = "- - : - -";
             txtShiftEnds1.Text = "- - : - -";
+            txtShiftStarts1.BorderBrush = Brushes.Gray;
+            txtShiftEnds1.BorderBrush = Brushes.Gray;
             txtAmountti.Text = string.Empty;
 
             listStarts.Clear();
@@ -1913,7 +1871,7 @@ namespace Palkanlaskin2
         // - - txtAmountti
         private void txtAmount_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter || e.Key == Key.LeftShift || e.Key == Key.RightShift)
+            if ( e.Key == Key.Tab|| e.Key == Key.Enter || e.Key == Key.Down || e.Key == Key.LeftShift || e.Key == Key.RightShift)
             {
 
                 if (txtAmountti.Text != string.Empty)
@@ -1991,7 +1949,7 @@ namespace Palkanlaskin2
 
             }
 
-            ChangeDotIfNeeded(txtgroupDeductionAmount);
+            ChangeDotToComma(txtgroupDeductionAmount);
 
             decimal amount;
 
@@ -2221,23 +2179,22 @@ namespace Palkanlaskin2
         {
             ManualBenefit = new ManualBenefit();
 
-            if (txtNameOfBenefit.Text == "Name of amount" || txtNameOfBenefit.Text == string.Empty)
+            if (txtNameOfBenefit.Text == "Name of benefit" || txtNameOfBenefit.Text == string.Empty)
             {
                 MessageBox.Show("Please give benefit a name");
                 return;
             }
 
-            ChangeDotIfNeeded(txtgroupBenefitAmount);
+            ChangeDotToComma(txtgroupBenefitAmount);
 
             decimal amount;
             bool ok = decimal.TryParse(txtgroupBenefitAmount.Text, out amount);
             if (!ok)
             {
+                MessageBox.Show("Amount is wrong", "Error");
                 txtgroupBenefitAmount.Focus();
                 return;
             }
-
-           
 
             if (radioPaidHourly.IsChecked == true)
             {
@@ -2333,6 +2290,7 @@ namespace Palkanlaskin2
 
             }
             decimal overtimeAmount;
+            ChangeDotToComma(txtOvertimeAmount);
             bool ok = decimal.TryParse(txtOvertimeAmount.Text, out overtimeAmount);
             if (!ok)
             {

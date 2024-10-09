@@ -11,13 +11,13 @@
 
         <Label x:Name="lblCYS" Content="Check Your Salary" Canvas.Left="33" Canvas.Top="18" FontFamily="Cambria" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold"/>
 
-        <Canvas x:Name="canvasloginAndCreateAccount" Height="400" Width="600" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-141" Canvas.Left="-645">
+        <Canvas x:Name="canvasloginAndCreateAccount" Height="400" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="62" Canvas.Left="10">
             <Canvas x:Name="canvasWelcome" Height="33" Width="210" Canvas.Left="380" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-23">
 
                 <Label x:Name="lblWelcome" Content="Welcome " Canvas.Left="10" Canvas.Top="4" FontWeight="Bold" FontFamily="Cambria" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
             </Canvas>
-            <Canvas x:Name="canvasRightUpperCornerComponents" Width="280" Height="140" Canvas.Left="160" Canvas.Top="97" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Canvas x:Name="canvasRightUpperCornerComponents" Width="280" Height="140" Canvas.Left="160" Canvas.Top="90" HorizontalAlignment="Center" VerticalAlignment="Top">
                 <GroupBox x:Name="groupStart" Height="120" Width="250"  Canvas.Left="15" Canvas.Top="5" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Canvas>
                         <Button x:Name="btnLogin" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" Width="70" Canvas.Left="37" Canvas.Top="49" FontSize="10" Click="btnLogin_Click"/>
@@ -66,11 +66,11 @@
 
         </Canvas>
 
-        <Canvas x:Name="canvasHowToStart" Height="400" Width="600" Canvas.Left="-645" Canvas.Top="340" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Canvas x:Name="canvasHowToStart" Height="400" Width="600" Canvas.Left="-770" Canvas.Top="144" HorizontalAlignment="Left" VerticalAlignment="Top">
 
             <Label Content="Customise your salary." HorizontalAlignment="Center" VerticalAlignment="Top" Width="188" Height="40" FontSize="18" Canvas.Left="50" Canvas.Top="4"/>
 
-            <Canvas x:Name="canvasSalaryAndAddBenefits" Width="600" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-10">
+            <Canvas x:Name="canvasSalaryAndAddBenefits" Width="600" Height="331" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="24">
 
                 <Button x:Name="btnSaveAllBenefits" BorderThickness="3" Content="Save and count" Width="94" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btnSaveAllBenefits_MDown" Canvas.Left="415" Canvas.Top="-45"/>
                 <GroupBox x:Name="groupHourlySalary" HorizontalAlignment="Left" Height="76" VerticalAlignment="Center" Width="270" Header="Salary" Canvas.Top="57" Canvas.Left="27">
@@ -206,10 +206,10 @@
 
                     <Label Focusable="False" Content="during one shift" Canvas.Left="10" Canvas.Top="99" Width="88" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="11"/>
                     <RadioButton x:Name="radioShift"  Canvas.Left="98" Canvas.Top="105" Height="18" Width="19" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <Label Focusable="False" Content="in a calendar week" Canvas.Left="124" Canvas.Top="99" Width="102" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="11"/>
-                    <RadioButton x:Name="radioWeek"  Canvas.Left="223" Canvas.Top="105" Height="19" Width="19" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <Label  Focusable="False" Content="in a calendar month" Canvas.Left="252" Canvas.Top="99" Width="110" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="11"/>
-                    <RadioButton x:Name="radioMonth"  Canvas.Left="360" Canvas.Top="105" Height="19" Width="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Label BorderBrush="Gray" Focusable="False" Content="in a calendar week" Canvas.Left="124" Canvas.Top="99" Width="102" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="11"/>
+                    <RadioButton IsEnabled="False" x:Name="radioWeek"  Canvas.Left="223" Canvas.Top="105" Height="19" Width="19" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Label BorderBrush="Gray" Focusable="False" Content="in a calendar month" Canvas.Left="252" Canvas.Top="99" Width="110" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="11"/>
+                    <RadioButton IsEnabled="False" x:Name="radioMonth"  Canvas.Left="360" Canvas.Top="105" Height="19" Width="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     <Button x:Name="btnOvertimeSave" BorderThickness="2" Width="42" Height="24" Canvas.Left="320" Canvas.Top="-22" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Save" Click="btnOvertimeSave_Click" />
                     <Button x:Name="btnReturnFromOvertime" Content="X" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="20" Height="18" Canvas.Left="370" Canvas.Top="-19" Click="btnReturnFromOvertime_click" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <Label Focusable="False" Content="and starts after working" Canvas.Left="10" Canvas.Top="62" Width="138" HorizontalAlignment="Left" VerticalAlignment="Center"/>
@@ -217,7 +217,7 @@
             </GroupBox>
 
         </Canvas>
-        <Canvas x:Name="canvasTypeInYourShifts" Height="400" Width="615" HorizontalAlignment="Left" Canvas.Top="140" VerticalAlignment="Top" Canvas.Left="695">
+        <Canvas x:Name="canvasTypeInYourShifts" Height="400" Width="615" HorizontalAlignment="Left" Canvas.Top="84" VerticalAlignment="Top" Canvas.Left="690">
             <Canvas x:Name="canvasCalendarShiftAndAndShiftStartAndEnd" Width="176" Height="258" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="34">
                 <Calendar  x:Name="calendarShift" FirstDayOfWeek="Monday" SelectionMode="SingleRange" Focusable="True" Canvas.Top="35" KeyDown="calendarKeyDown" PreviewMouseDown="calendarShift_PreviewMouseDown" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 <Label Content="Shift starts" Canvas.Top="208" FontSize="8" Width="48" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="10"/>

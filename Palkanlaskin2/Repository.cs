@@ -333,57 +333,83 @@ namespace Palkanlaskin2
         public OvertimeBenefit GetOvertimeBenefitExists(int timePeriod, TimeSpan time, decimal amount)
         {
             var overtimeBenefit = new OvertimeBenefit();
-
             string stringTime = overtimeBenefit.TurnTimeSpanintoString(time);
 
             using (MySqlConnection conn = new MySqlConnection(localWithDb))
             {
                 conn.Open();
 
-                var sql = $"USE palkanlaskin; SELECT `LisäID`, `Määrä`, `Työtunnit`, `Aikaväli` FROM" +
-                    $" `ylityölisä` WHERE `Määrä` = {amount} && `Työtunnit` = '{stringTime}' && `Aikaväli` = {timePeriod} ; ";
+                // Corrected SQL query: replaced && with AND, added spaces for readability
+                var sql = $"SELECT `LisäID`, `Määrä`, `Työtunnit`, `Aikaväli` " +
+                          $"FROM `ylityölisä` " +
+                          $"WHERE `Määrä` = @amount AND `Työtunnit` = @time AND `Aikaväli` = @timePeriod;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
 
-                var dr = cmd.ExecuteReader();
+                // Using parameters to prevent SQL injection
+                cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@time", stringTime);
+                cmd.Parameters.AddWithValue("@timePeriod", timePeriod);
 
-                while (dr.Read())
+                using (var dr = cmd.ExecuteReader())
                 {
-                    overtimeBenefit = new OvertimeBenefit
+                    while (dr.Read())
                     {
-                        ID = dr.GetInt32("LisäID"),
-                        BenefitAmount = dr.GetDecimal("Määrä"),
-                        Time = dr.GetTimeSpan("Työtunnit"),
-                        TimePeriod = dr.GetInt32("Aikaväli")
-                    };
-
+                        overtimeBenefit = new OvertimeBenefit
+                        {
+                            ID = dr.GetInt32("LisäID"),
+                            BenefitAmount = dr.GetDecimal("Määrä"),
+                            Time = dr.GetTimeSpan("Työtunnit"),
+                            TimePeriod = dr.GetInt32("Aikaväli")
+                        };
+                    }
                 }
-
             }
 
             return overtimeBenefit;
         }
+
         public void AddToTableJobIdAndContractIDOvertimeBenefi(int contractID, int benefitID)
         {
             if (!Löytyy)
             {
-                var sql = "USE palkanlaskin; INSERT INTO `työsopimusylityölisä` (LisäID, SopimusID) VALUES (@lisäid, @sopimusid) ; ";
-
-                using (var connn = new MySqlConnection(localWithDb))
+                // Check if the benefitID exists in the ylityölisä table
+                using (var checkConn = new MySqlConnection(localWithDb))
                 {
-                    connn.Open();
+                    checkConn.Open();
 
-                    MySqlCommand cmd = new MySqlCommand(sql, connn);
+                    var checkSql = "SELECT COUNT(*) FROM `ylityölisä` WHERE `LisäID` = @lisäid;";
+                    using (var checkCmd = new MySqlCommand(checkSql, checkConn))
+                    {
+                        checkCmd.Parameters.AddWithValue("@lisäid", benefitID);
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
 
-                    cmd.Parameters.AddWithValue("@lisäid", benefitID);
-                    cmd.Parameters.AddWithValue("@sopimusid", contractID);
+                        // If the benefitID exists, proceed with the insertion
+                        if (count > 0)
+                        {
+                            var sql = "INSERT INTO `työsopimusylityölisä` (LisäID, SopimusID) VALUES (@lisäid, @sopimusid);";
 
-                    cmd.ExecuteNonQuery();
+                            using (var connn = new MySqlConnection(localWithDb))
+                            {
+                                connn.Open();
 
+                                MySqlCommand cmd = new MySqlCommand(sql, connn);
+                                cmd.Parameters.AddWithValue("@lisäid", benefitID);
+                                cmd.Parameters.AddWithValue("@sopimusid", contractID);
+
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        else
+                        {
+                            // Handle the case where the benefitID does not exist
+                            Debug.WriteLine($"BenefitID {benefitID} does not exist in ylityölisä.");
+                        }
+                    }
                 }
             }
-
         }
+
         public void RemoveOvertimeBenefit(int contractID, int benefitID)
         {
             using (MySqlConnection conn = new MySqlConnection(localWithDb))
@@ -437,91 +463,99 @@ namespace Palkanlaskin2
           
         }
         private bool CheckIfWeeklyBenefitExists(int day, string start, string end, decimal amount)
-        
         {
-            var existingWeeklyBenefit = new WeeklyBenefit();
+            bool exists = false; // Define the boolean variable to track if the benefit exists
 
             using (MySqlConnection conn = new MySqlConnection(localWithDb))
             {
                 conn.Open();
 
-
-                var sql = $"USE palkanlaskin; SELECT `LisäID`, `Määrä`, `Viikonpäivä`, Alkaa, Loppuu " +
-                    $"FROM `viikottainenlisä` " +
-                    $"WHERE `Määrä` = {amount} && `Viikonpäivä` = {day} && Alkaa = '{start}' && Loppuu = '{end}';";
+                // Corrected SQL query: replaced && with AND, removed USE statement
+                var sql = $"SELECT `LisäID`, `Määrä`, `Viikonpäivä`, Alkaa, Loppuu " +
+                          $"FROM `viikottainenlisä` " +
+                          $"WHERE `Määrä` = @amount AND `Viikonpäivä` = @day AND `Alkaa` = @start AND `Loppuu` = @end;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
 
-                var dr = cmd.ExecuteReader();
+                // Using parameters to prevent SQL injection
+                cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@day", day);
+                cmd.Parameters.AddWithValue("@start", start);
+                cmd.Parameters.AddWithValue("@end", end);
 
-                while (dr.Read())
+                using (var dr = cmd.ExecuteReader())
                 {
-                    existingWeeklyBenefit = new WeeklyBenefit
+                    while (dr.Read())
                     {
-                        dayOfWeek = dr.GetInt32("Viikonpäivä"),
-                        Start = dr.GetTimeSpan("Alkaa"),
-                        End = dr.GetTimeSpan("Loppuu"),
-                        Amount = dr.GetDecimal("Määrä"),
-                        ID = dr.GetInt32("LisäID")
+                        // Create a new WeeklyBenefit instance only if a record is found
+                        var existingWeeklyBenefit = new WeeklyBenefit
+                        {
+                            dayOfWeek = dr.GetInt32("Viikonpäivä"),
+                            Start = dr.GetTimeSpan("Alkaa"),
+                            End = dr.GetTimeSpan("Loppuu"),
+                            Amount = dr.GetDecimal("Määrä"),
+                            ID = dr.GetInt32("LisäID")
+                        };
 
-                    };
-
-
-                }
-               
-
-
-                if (existingWeeklyBenefit.dayOfWeek == day && existingWeeklyBenefit.Amount == amount &&
-                    existingWeeklyBenefit.stringStart == start && existingWeeklyBenefit.stringEnd == end)
-                {
-                    Löytyy = true;
-
-                }
-                else
-                {
-                    Löytyy = false;
+                        // Check if the existing benefit matches the input
+                        if (existingWeeklyBenefit.dayOfWeek == day &&
+                            existingWeeklyBenefit.Amount == amount &&
+                            existingWeeklyBenefit.Start == TimeSpan.Parse(start) &&
+                            existingWeeklyBenefit.End == TimeSpan.Parse(end))
+                        {
+                            exists = true; // Set exists to true if a match is found
+                            break; // Exit the loop early if a match is found
+                        }
+                    }
                 }
             }
 
-            return Löytyy;
-
+            return exists; // Return the boolean indicating existence
         }
+
         public WeeklyBenefit GetTheWeeklyBenefit(int day, string start, string end, decimal amount)
         {
-            WeeklyBenefit väliaikainenWeeklybenefit = new WeeklyBenefit();
+            WeeklyBenefit temporaryWeeklyBenefit = null; // Initialize to null
 
             using (MySqlConnection conn = new MySqlConnection(localWithDb))
             {
                 conn.Open();
 
-                var sql = $"USE palkanlaskin; SELECT * " +
-                    $"FROM `viikottainenlisä` " +
-                    $"WHERE `Määrä` = {amount} && `Viikonpäivä` = {day} && Alkaa = '{start}' && Loppuu = '{end}' ;";
+                // Corrected SQL query: replaced && with AND, removed USE statement
+                var sql = "SELECT * FROM `viikottainenlisä` " +
+                          "WHERE `Määrä` = @amount AND `Viikonpäivä` = @day AND Alkaa = @start AND Loppuu = @end;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
 
-                var dr = cmd.ExecuteReader();
+                // Use parameters to prevent SQL injection
+                cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@day", day);
+                cmd.Parameters.AddWithValue("@start", start);
+                cmd.Parameters.AddWithValue("@end", end);
 
-                while (dr.Read())
+                using (var dr = cmd.ExecuteReader())
                 {
-                    väliaikainenWeeklybenefit = new WeeklyBenefit
+                    while (dr.Read())
                     {
-                        
-                        ID = dr.GetInt32("LisäID"),
-                        Amount = dr.GetDecimal("Määrä"),
-                        dayOfWeek = dr.GetInt32("Viikonpäivä"),
-                        Start = dr.GetTimeSpan("Alkaa"),
-                        End = dr.GetTimeSpan("Loppuu")
+                        // Create a new WeeklyBenefit instance if a record is found
+                        temporaryWeeklyBenefit = new WeeklyBenefit
+                        {
+                            ID = dr.GetInt32("LisäID"),
+                            Amount = dr.GetDecimal("Määrä"),
+                            dayOfWeek = dr.GetInt32("Viikonpäivä"),
+                            Start = dr.GetTimeSpan("Alkaa"),
+                            End = dr.GetTimeSpan("Loppuu")
+                        };
 
-
-                    };
-
-                }            
+                        // Break after the first match, if you expect only one benefit per criteria
+                        break;
+                    }
+                }
             }
 
-            return väliaikainenWeeklybenefit;
-
+            return temporaryWeeklyBenefit; // Return the found benefit or null if not found
         }
+
         public void AddToTableJobIDAndWeeklyBenefit(int contractID, int weeklyBenefitID)
         {
             if (!Löytyy)
@@ -603,108 +637,91 @@ namespace Palkanlaskin2
         }
         private bool CheckIfBenefitOnADateExists(decimal amount, DateOnly date, string start, string end)
         {
-
-            var existingBenefit = new BenefitOnADate();
-
-          
+            bool found = false; // Renamed variable to 'found' for clarity
 
             using (MySqlConnection conn = new MySqlConnection(localWithDb))
             {
-                var stringdate = date.ToString();
-                var parts = stringdate.Split('/');
-                stringdate = parts[2] + "-" + parts[0] + "-" + parts[1];
-                Debug.WriteLine(date);
+                // Format the date as yyyy-MM-dd
+                var formattedDate = date.ToString("yyyy-MM-dd");
                 conn.Open();
 
-                var sql = $"USE palkanlaskin; SELECT `LisäID`, `Määrä`, `pvm`, Alkaa, Loppuu " +
-                    $"FROM `lisä` " +
-                    $"WHERE `Määrä` = {amount} && `pvm` = '{date}' && Alkaa = '{start}' && Loppuu = '{end}' ;";
+                // Fixed SQL query: replaced && with AND, used parameters
+                var sql = "SELECT `LisäID`, `Määrä`, `pvm`, `Alkaa`, `Loppuu` " +
+                          "FROM `lisä` " +
+                          "WHERE `Määrä` = @amount AND `pvm` = @date AND `Alkaa` = @start AND `Loppuu` = @end;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
+                // Use parameters to prevent SQL injection
+                cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@date", formattedDate);
+                cmd.Parameters.AddWithValue("@start", start);
+                cmd.Parameters.AddWithValue("@end", end);
 
-                var dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (var dr = cmd.ExecuteReader())
                 {
-                    existingBenefit = new BenefitOnADate
+                    if (dr.Read())
                     {
-                        Date = dr.GetDateOnly("pvm"),
-                        Start = dr.GetTimeSpan("Alkaa"),
-                        End = dr.GetTimeSpan("Loppuu"),
-                        Amount = dr.GetDecimal("Määrä"),
-                        ID = dr.GetInt32("LisäID")
+                        // Create benefit only if record exists
+                        var existingBenefit = new BenefitOnADate
+                        {
+                            Date = dr.GetDateOnly("pvm"),
+                            Start = dr.GetTimeSpan("Alkaa"),
+                            End = dr.GetTimeSpan("Loppuu"),
+                            Amount = dr.GetDecimal("Määrä"),
+                            ID = dr.GetInt32("LisäID")
+                        };
 
-                    };
-
-
+                        // Check if the existing benefit matches the input
+                        found = existingBenefit.Date == date &&
+                                existingBenefit.Amount == amount &&
+                                existingBenefit.Start == TimeSpan.Parse(start) &&
+                                existingBenefit.End == TimeSpan.Parse(end);
+                    }
                 }
-
-                
-
-                if (existingBenefit.Date == date && existingBenefit.Amount == amount &&
-                    existingBenefit.stringStart == start && existingBenefit.stringEnd == end)
-                {
-                    Löytyy = true;
-
-                }
-                else
-                {
-                    Löytyy = false;
-                }
-
             }
 
-            return Löytyy;
-
+            return found;
         }
+
+
         public BenefitOnADate GetBenefitOnADate(decimal amount, DateOnly date, string start, string end)
         {
-            var notWorkingdate = date.ToString("dd-MM-yyyy");
-            var parts = notWorkingdate.Split('-');
-            var stringdate = parts[2];
-            stringdate += "-";
-            stringdate += parts[1];
-            stringdate += "-";
-            stringdate += parts[0];
-
-
-
-            BenefitOnADate benefit = new BenefitOnADate();
+            // Simplified date formatting to "yyyy-MM-dd"
+            var formattedDate = date.ToString("yyyy-MM-dd");
+            BenefitOnADate benefit = null;
 
             using (MySqlConnection conn = new MySqlConnection(localWithDb))
             {
                 conn.Open();
 
-
-                var sql = $"USE palkanlaskin; SELECT * " +
-                    $"FROM `lisä` " +
-                    $"WHERE `Määrä` = {amount} && `pvm` = '{stringdate}' && Alkaa = '{start}' && Loppuu = '{end}';";
-
+                // Use parameters to prevent SQL injection
+                var sql = "SELECT * FROM `lisä` WHERE `Määrä` = @amount AND `pvm` = @date AND `Alkaa` = @start AND `Loppuu` = @end;";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@date", formattedDate);
+                cmd.Parameters.AddWithValue("@start", start);
+                cmd.Parameters.AddWithValue("@end", end);
 
-                var dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (var dr = cmd.ExecuteReader())
                 {
-                    benefit = new BenefitOnADate
+                    if (dr.Read())
                     {
-
-                        ID = dr.GetInt32("LisäID"),
-                        Amount = dr.GetDecimal("Määrä"),
-                        Date = dr.GetDateOnly("pvm"),
-                        Start = dr.GetTimeSpan("Alkaa"),
-                        End = dr.GetTimeSpan("Loppuu")
-
-
-
-                    };
-
+                        benefit = new BenefitOnADate
+                        {
+                            ID = dr.GetInt32("LisäID"),
+                            Amount = dr.GetDecimal("Määrä"),
+                            Date = dr.GetDateOnly("pvm"),
+                            Start = dr.GetTimeSpan("Alkaa"),
+                            End = dr.GetTimeSpan("Loppuu")
+                        };
+                    }
                 }
-
             }
 
             return benefit;
         }
+
+
         public void AddToTableJobIdAndContractIDBenefitOnADate(int contractID, int benefitID)
         {
             if (!Löytyy)
@@ -1172,88 +1189,77 @@ namespace Palkanlaskin2
         private bool CheckIfManualDeductionExists(string name, decimal amount, int ourly_or_once)
         {
             var manualDeduction = new ManualDeduction();
+            bool löytyykö = false;  // Declare 'Löytyy'
 
             using (MySqlConnection conn = new MySqlConnection(localWithDb))
             {
                 conn.Open();
 
-
-                var sql = $"USE palkanlaskin; SELECT `Määrä`, `Nimi`, `Tunnittain_Tai_Kerta`  FROM randomdeduction WHERE `Määrä` = {amount} AND Nimi = '{name}' AND Tunnittain_Tai_Kerta = {ourly_or_once} ;";
-
+                // Use parameterized query
+                var sql = "SELECT `Määrä`, `Nimi`, `Tunnittain_Tai_Kerta` FROM randomdeduction WHERE `Määrä` = @amount AND Nimi = @name AND Tunnittain_Tai_Kerta = @ourly_or_once;";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@ourly_or_once", ourly_or_once);
 
-                var dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (var dr = cmd.ExecuteReader())
                 {
-                    manualDeduction = new ManualDeduction
+                    if (dr.Read())
                     {
-                        Name = dr.GetString("Nimi"),
-                        Amount = dr.GetDecimal("Määrä"),
-                        OurlyOrOnce = dr.GetInt32("Tunnittain_Tai_Kerta")
-
-                    };
-
-
+                        manualDeduction = new ManualDeduction
+                        {
+                            Name = dr.GetString("Nimi"),
+                            Amount = dr.GetDecimal("Määrä"),
+                            OurlyOrOnce = dr.GetInt32("Tunnittain_Tai_Kerta")
+                        };
+                        löytyykö = true;  // Found a matching record
+                    }
                 }
+
                 Debug.WriteLine(manualDeduction.Amount);
-               
-                if (manualDeduction.Name == name)
-                {
-                    Löytyy = true;
-
-                }
-                else
-                {
-                    Löytyy = false;
-                }
             }
 
-            return Löytyy;
-
+            return löytyykö;
         }
+
         public bool CheckIfManualDeductionExists(int contractID)
         {
             ObservableCollection<MDeduction_SopimusID_LisäID> manualDeduction = new ObservableCollection<MDeduction_SopimusID_LisäID>();
+            bool löytyykö = false;  // Declare 'Löytyy'
 
             using (MySqlConnection conn = new MySqlConnection(localWithDb))
             {
                 conn.Open();
 
-                var sql = $"USE palkanlaskin; SELECT * FROM työsopimusrandomdeduction WHERE `sopimusID` = {contractID} ;";
-
+                // Use parameterized query
+                var sql = "SELECT * FROM työsopimusrandomdeduction WHERE `sopimusID` = @contractID;";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@contractID", contractID);
 
-                var dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (var dr = cmd.ExecuteReader())
                 {
-                    manualDeduction.Add(new MDeduction_SopimusID_LisäID
+                    while (dr.Read())
                     {
-                        sopimusid = dr.GetInt32("SopimusID"),
-                        lisäid = dr.GetInt32("LisäID")
-                    });
-
-
+                        manualDeduction.Add(new MDeduction_SopimusID_LisäID
+                        {
+                            sopimusid = dr.GetInt32("SopimusID"),
+                            lisäid = dr.GetInt32("LisäID")
+                        });
+                    }
                 }
-
-
             }
-            Löytyy = false;
 
-            foreach (var item in manualDeduction)
+            // Check if any record exists
+            if (manualDeduction.Count > 0)
             {
-                if (item.sopimusid == contractID)
-                {
-                    Löytyy = true;
-
-                }
-
+                löytyykö = true;
             }
 
-            return Löytyy;
-
+            return löytyykö;
         }
+
+
+
         private ManualDeduction GetTheRamdomDeduction(string name, decimal amount, int ourly_or_once)
         {
             var manualDeduction = new ManualDeduction();
@@ -1262,38 +1268,34 @@ namespace Palkanlaskin2
             {
                 conn.Open();
 
-
-                var sql = $"USE palkanlaskin; SELECT * FROM randomdeduction WHERE `Määrä` = {amount} AND Nimi = '{name}' AND Tunnittain_Tai_Kerta = {ourly_or_once}  ;";
-
+                // Use parameterized query
+                var sql = "SELECT * FROM randomdeduction WHERE `Määrä` = @amount AND Nimi = @name AND Tunnittain_Tai_Kerta = @ourly_or_once;";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@ourly_or_once", ourly_or_once);
 
-                var dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (var dr = cmd.ExecuteReader())
                 {
-                    manualDeduction = new ManualDeduction
+                    if (dr.Read())
                     {
-                        Name = dr.GetString("Nimi"),
-                        Amount = dr.GetDecimal("Määrä"),
-                        ID = dr.GetInt32("LisäID"),
-                        OurlyOrOnce = dr.GetInt32("Tunnittain_Tai_Kerta")
-
-                    };
-
-
+                        manualDeduction = new ManualDeduction
+                        {
+                            Name = dr.GetString("Nimi"),
+                            Amount = dr.GetDecimal("Määrä"),
+                            ID = dr.GetInt32("LisäID"),
+                            OurlyOrOnce = dr.GetInt32("Tunnittain_Tai_Kerta")
+                        };
+                    }
                 }
+
                 Debug.WriteLine(manualDeduction.ID);
                 Debug.WriteLine(manualDeduction.OurlyOrOnce);
 
                 return manualDeduction;
-
-              
             }
-
-
-
-
         }
+
         private void AddContractIDAndManualDeductionIdToTable(int contractID, int benefitID)
         {
             using (var connn = new MySqlConnection(localWithDb))
@@ -1469,88 +1471,85 @@ namespace Palkanlaskin2
         private bool CheckIfManualBenefitExists(string name, decimal amount, int ourly_or_once)
         {
             var manualBenefit = new ManualBenefit();
+            bool löytyykö = false;  // Declare the 'Löytyy' variable
 
             using (MySqlConnection conn = new MySqlConnection(localWithDb))
             {
                 conn.Open();
 
+                // Remove the USE statement, and use a parameterized query to avoid SQL injection
+                var sql = "SELECT `Määrä`, Nimi, Tunnittain_Tai_Kerta FROM randombenefit WHERE `Määrä` = @amount AND Nimi = @name AND Tunnittain_Tai_Kerta = @ourly_or_once;";
 
-                var sql = $"USE palkanlaskin; SELECT `Määrä`, Nimi FROM randombenefit WHERE `Määrä` = {amount} AND Nimi = '{name}' AND Tunnittain_Tai_Kerta = {ourly_or_once} ;";
-
+                // Create command and add parameters to avoid SQL injection
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@ourly_or_once", ourly_or_once);
 
-                var dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (var dr = cmd.ExecuteReader())
                 {
-                    manualBenefit = new ManualBenefit
+                    // Read through the results
+                    while (dr.Read())
                     {
-                        Name = dr.GetString("Nimi"),
-                        Amount = dr.GetDecimal("Määrä"),
-                        OurlyOrOnce = dr.GetInt32("Tunnittain_Tai_Kerta")
-
-                    };
-
-
+                        manualBenefit = new ManualBenefit
+                        {
+                            Name = dr.GetString("Nimi"),
+                            Amount = dr.GetDecimal("Määrä"),
+                            OurlyOrOnce = dr.GetInt32("Tunnittain_Tai_Kerta")
+                        };
+                    }
                 }
-                Debug.WriteLine(manualBenefit.Amount);
 
+
+                // Check if the benefit was found
                 if (manualBenefit.Name == name)
                 {
-                    Löytyy = true;
-
-                }
-                else
-                {
-                    Löytyy = false;
+                    löytyykö = true;
                 }
             }
 
-            return Löytyy;
-
+            return löytyykö;
         }
+
+
         public bool CheckIfManualBenefitExists(int contractID)
         {
             ObservableCollection<MBenefit_SopimusID_LisäID> manualBenefit = new ObservableCollection<MBenefit_SopimusID_LisäID>();
+            bool löytyykö = false;  // Declare 'Löytyy'
 
             using (MySqlConnection conn = new MySqlConnection(localWithDb))
             {
                 conn.Open();
 
-                var sql = $"USE palkanlaskin; SELECT * FROM työsopimusrandombenefit WHERE `sopimusID` = {contractID} ;";
+                // Remove the USE statement and use a parameterized query
+                var sql = "SELECT * FROM työsopimusrandombenefit WHERE `sopimusID` = @contractID;";
 
+                // Create command and add parameter
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@contractID", contractID);
 
-                var dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (var dr = cmd.ExecuteReader())
                 {
-                    manualBenefit.Add(new MBenefit_SopimusID_LisäID
+                    while (dr.Read())
                     {
-                        sopimusid = dr.GetInt32("SopimusID"),
-                        lisäid = dr.GetInt32("LisäID")
-                    });
-
-
+                        manualBenefit.Add(new MBenefit_SopimusID_LisäID
+                        {
+                            sopimusid = dr.GetInt32("SopimusID"),
+                            lisäid = dr.GetInt32("LisäID")
+                        });
+                    }
                 }
-               
-               
             }
-            Löytyy = false;
 
-            foreach (var item in manualBenefit)
+            // Check if any record with the matching contractID exists in the result
+            if (manualBenefit.Count > 0)
             {
-                if (item.sopimusid == contractID)
-                {
-                    Löytyy = true;
-
-                }
-
+                löytyykö = true;
             }
 
-            return Löytyy;
-
+            return löytyykö;
         }
+
 
         private ManualBenefit GetTheManualBenefit(string name, decimal amount, int ourly_or_once)
         {
@@ -1560,37 +1559,37 @@ namespace Palkanlaskin2
             {
                 conn.Open();
 
+                // Remove the USE statement and use a parameterized query
+                var sql = "SELECT * FROM randombenefit WHERE `Määrä` = @amount AND Nimi = @name AND Tunnittain_Tai_Kerta = @ourly_or_once;";
 
-                var sql = $"USE palkanlaskin; SELECT * FROM randombenefit WHERE `Määrä` = {amount} AND Nimi = '{name}' AND Tunnittain_Tai_Kerta = {ourly_or_once} ;";
-
+                // Create command and add parameters
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@ourly_or_once", ourly_or_once);
 
-                var dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (var dr = cmd.ExecuteReader())
                 {
-                    manualBenefit = new ManualBenefit
+                    // If a result is found, populate the ManualBenefit object
+                    if (dr.Read())
                     {
-                        Name = dr.GetString("Nimi"),
-                        Amount = dr.GetDecimal("Määrä"),
-                        ID = dr.GetInt32("LisäID"),
-                        OurlyOrOnce = dr.GetInt32("Tunnittain_Tai_Kerta")
-
-                    };
-
-
+                        manualBenefit = new ManualBenefit
+                        {
+                            Name = dr.GetString("Nimi"),
+                            Amount = dr.GetDecimal("Määrä"),
+                            ID = dr.GetInt32("LisäID"),
+                            OurlyOrOnce = dr.GetInt32("Tunnittain_Tai_Kerta")
+                        };
+                    }
                 }
+
+                // Debugging to verify the ID
                 Debug.WriteLine(manualBenefit.ID);
 
                 return manualBenefit;
-
-
             }
-
-
-
-
         }
+
         private void AddContractIDAndManualBenefitIdToTable(int contractID, int benefitID)
         {
             using (var connn = new MySqlConnection(localWithDb))
